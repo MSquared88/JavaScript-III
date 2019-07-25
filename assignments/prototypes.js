@@ -24,6 +24,8 @@ GameObject.prototype.destroy = function(){
   return `${this.name} was removed from the game.`
 }
 
+
+
 /*
   === CharacterStats ===
   * healthPoints
@@ -41,6 +43,7 @@ CharacterStats.prototype = Object.create(GameObject.prototype)
 CharacterStats.prototype.takeDamage = function(){
   return `${this.name} took damage.`
 }
+
 
 /*
   === Humanoid (Having an appearance or character resembling that of a human.) ===
@@ -143,15 +146,77 @@ Humanoid.prototype.greet = function(){
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
 
   function Villain(villainAttrs){
-    CharacterStats.call(this, villainAttrs)
-    this.team = villainAttrs.team;
-    this.weapons = villainAttrs.weapons;
-    this.language = villainAttrs.language;
+    Humanoid.call(this, villainAttrs)
   }
-  Villain.prototype = Object.create(humanoidAttrs.prototype)
+
+  Villain.prototype = Object.create(Humanoid.prototype)
+
+  Villain.prototype.atk = function(target){
+    //a method that reduces opponents health
+    target.healthPoints -= 500
+    if (target.healthPoints <= 0){
+      console.log(target.destroy())
+    }
+    return `${this.name} wields his ${this.weapons[0]} and strikes a blow to ${target.name}`
+  }
+
+  function Hero(heroAttrs){
+    Humanoid.call(this, heroAttrs)
+
+  }
+  Hero.prototype = Object.create(Humanoid.prototype)
+  Hero.prototype = Object.create(Villain.prototype)
+
+
+
+  const balrog = new Villain({
+    createdAt: new Date(),
+    dimensions: {
+      length: 55,
+      width: 88,
+      height: 44,
+    },
+    healthPoints: 300,
+    name: 'The Balrog of Morgoth',
+    team: 'Bad Guys',
+    weapons: [
+      'A Fiery Sword',
+      'A Fiery Whip',
+    ],
+    language: 'Evil',
+  });
+
+  const gandalf = new Hero({
+    createdAt: new Date(),
+    dimensions: {
+      length: 6,
+      width: 8,
+      height: 4,
+    },
+    healthPoints: 1000,
+    name: 'Gandalf The Grey',
+    team: 'The Fellowship',
+    weapons: [
+      'Sword Glamdring',
+      'Staff',
+    ],
+    language: 'Evil',
+  });
+
+
+
+console.log(balrog.atk(gandalf))
+console.log(gandalf.healthPoints)
+console.log(gandalf.atk(balrog))
+console.log(balrog.healthPoints)
+
+
+
+
   
-  Humanoid.prototype.greet = function(){
-    return `${this.name} offers a greeting in ${this.language}`
-  }
+
+  // Humanoid.prototype.greet = function(){
+  //   return `${this.name} offers a greeting in ${this.language}`
+  // }
   
   
